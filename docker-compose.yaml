@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: final
+    environment:
+      - CONFIG_MONGO_URI = mongodb://dbuser:secret_password@mongo_db:27017/db
+    depends_on:
+      - mongo_db
+    networks:
+      - bridgenetwork
+
+  mongo_db:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=dbuser
+      - MONGO_INITDB_ROOT_PASSWORD=secret_password
+    restart: always
+    networks:
+      - bridgenetwork
+
+networks:
+  bridgenetwork:
+    driver: bridge
